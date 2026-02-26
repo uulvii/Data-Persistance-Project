@@ -32,11 +32,11 @@ public class Brick : MonoBehaviour
         }
         renderer.SetPropertyBlock(block);
     }
-
+   
     private void OnCollisionEnter(Collision other)
     {
-        onDestroyed.Invoke(PointValue);
-        
+        onDestroyed.Invoke(PointValue); //tell the manager we are destroyed and how many points we are worth
+
         //slight delay to be sure the ball have time to bounce
         Destroy(gameObject, 0.2f);
     }

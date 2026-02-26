@@ -11,6 +11,8 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+    public Text BestScoreText;
+
     public GameObject GameOverText;
     
     private bool m_Started = false;
@@ -18,7 +20,9 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
-    
+    public Button menuButton;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,8 +38,11 @@ public class MainManager : MonoBehaviour
                 var brick = Instantiate(BrickPrefab, position, Quaternion.identity);
                 brick.PointValue = pointCountArray[i];
                 brick.onDestroyed.AddListener(AddPoint);
+                menuButton.gameObject.SetActive(false);
             }
         }
+        // Display the best score from the DataManager
+        BestScoreText.text = $"Best Score : {DataManager.Instance.bestPlayerName} : {DataManager.Instance.highScore}"; 
     }
 
     private void Update()
@@ -72,5 +79,17 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+        menuButton.gameObject.SetActive(true);
+
+        // REKOR KONTROLÜ
+        if (m_Points > DataManager.Instance.highScore)
+        {
+            // Eðer þu anki puan rekoru geçtiyse JSON'a kaydet
+            DataManager.Instance.SavePlayerData(m_Points);
+            // Ekranda hemen güncelle
+            BestScoreText.text = $"Best Score : {DataManager.Instance.currentPlayerName} : {m_Points}";
+        }
     }
-}
+
+     
+  }
